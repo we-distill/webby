@@ -21,8 +21,15 @@ function processPage(url: string, html: string) {
   const $ = cheerio.load(html);
 
   // clean up the page
-  ['header', 'script', 'header', 'nav', '#p-lang-btn', '.infobox'].forEach((selector) => {
+  ['script', '.vector-header', 'nav', '#p-lang-btn', '.infobox'].forEach((selector) => {
     $(selector).remove()
+  })
+
+  // fix stylesheet links
+  const domain = new URL(url).origin
+  $('link[rel="stylesheet"]').each((i, el) => {
+    const href = $(el).attr('href')
+    if (href?.startsWith('/')) $(el).attr('href', domain + href)
   })
 
   // output html
@@ -34,7 +41,7 @@ function processPage(url: string, html: string) {
     return $(el).attr('href');
   }).get()
 
-  console.log('links', linkUrls.slice(0, 20));
+  console.log('links', linkUrls.slice(0, limitPerPage));
 }
 
 const url = process.argv[2];
