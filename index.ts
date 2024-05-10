@@ -5,7 +5,7 @@ import fs from "fs";
 const limitPerPage = 10
 
 // how deep to traverse from the initial page
-const depth = 2
+const maxDepth = 2
 
 async function fetchPage(url: string) {
   console.log(`Loading site: ${url}`);
@@ -34,7 +34,7 @@ function processPage(url: string, html: string) {
 
   // output html
   if (!fs.existsSync('output')) fs.mkdirSync('output')
-  fs.writeFileSync('output/page.html', `<html><body>${$.html()}</body></html>`)
+  fs.writeFileSync('output/page.html', $.html())
 
   const links = $('a[href^="/wiki/"]')
   const linkUrls = links.map((i, el) => {
