@@ -21,11 +21,11 @@ function processPage(url: string, html: string) {
   const $ = cheerio.load(html);
 
   // clean up the page
-  ['script', '.vector-header', 'nav', '#p-lang-btn', '.infobox'].forEach((selector) => {
+  ['script', '.vector-header', 'nav', '#p-lang-btn'].forEach((selector) => {
     $(selector).remove()
   })
 
-  // fix stylesheet links
+  // loop through all stylesheet links and fix their urls
   const domain = new URL(url).origin
   $('link[rel="stylesheet"]').each((i, el) => {
     const href = $(el).attr('href')
@@ -36,6 +36,7 @@ function processPage(url: string, html: string) {
   if (!fs.existsSync('output')) fs.mkdirSync('output')
   fs.writeFileSync('output/page.html', $.html())
 
+  // fetch all links that start with /wiki/
   const links = $('a[href^="/wiki/"]')
   const linkUrls = links.map((i, el) => {
     return $(el).attr('href');

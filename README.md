@@ -15,7 +15,8 @@ bun install
 3. Run it:
 
 ```bash
-bun run index.ts
+bun run index.ts https://en.wikipedia.org/wiki/Taylor_Swift
+open output/page.html
 ```
 
 This project was created using `bun init` in bun v1.1.4. 
