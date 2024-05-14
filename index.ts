@@ -7,7 +7,13 @@ const limitPerPage = 10
 // how deep to traverse from the initial page
 const maxDepth = 2
 
+// limit to prevent us from getting too crazy
+const globalMax = 100
+let globalCounter = 0
+
 async function fetchPage(url: string) {
+  if (++globalCounter >= globalMax) throw new Error('reached global max')
+
   console.log(`Loading site: ${url}`);
   const response = await fetch(url);
   const html = await response.text();
@@ -40,9 +46,9 @@ function processPage(url: string, html: string) {
   const links = $('a[href^="/wiki/"]')
   const linkUrls = links.map((i, el) => {
     return $(el).attr('href');
-  }).get()
+  }).get().slice(0, limitPerPage)
 
-  console.log('links', linkUrls.slice(0, limitPerPage));
+  console.log('links', linkUrls);
 }
 
 const url = process.argv[2];
@@ -52,6 +58,6 @@ if (!url) {
 }
 
 await fetchPage(url);
-
+if (globalCounter > 1) console.log('fetched count:', globalCounter)
 
 
