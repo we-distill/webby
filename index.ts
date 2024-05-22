@@ -2,13 +2,13 @@ import * as cheerio from "cheerio";
 import fs from "fs";
 
 // how many links per page to fetch
-const limitPerPage = 10
+const limitPerPage = 5
 
 // how deep to traverse from the initial page
 const maxDepth = 2
 
 // limit to prevent us from getting too crazy
-const globalMax = 100
+const globalMax = 50
 let globalCounter = 0
 
 async function fetchPage(url: string) {
@@ -20,7 +20,6 @@ async function fetchPage(url: string) {
   console.log('got', Math.round(html.length / 1024), 'kb of html');
 
   processPage(url, html);
-  return html
 }
 
 function processPage(url: string, html: string) {
@@ -49,6 +48,7 @@ function processPage(url: string, html: string) {
   }).get().slice(0, limitPerPage)
 
   console.log('links', linkUrls);
+  return linkUrls
 }
 
 const url = process.argv[2];
