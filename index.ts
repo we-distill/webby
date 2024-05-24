@@ -26,26 +26,33 @@ function processPage(url: string, html: string) {
   const $ = cheerio.load(html);
 
   // clean up the page
-  ['script', '.vector-header', 'nav', '#p-lang-btn'].forEach((selector) => {
+  ['script', '.vector-header', 'nav', '#p-lang-btn', 'style'].forEach((selector) => {
     $(selector).remove()
   })
 
-  // loop through all stylesheet links and fix their urls
+  // loop through all stylesheets & images and fix their urls
   const domain = new URL(url).origin
   $('link[rel="stylesheet"]').each((i, el) => {
     const href = $(el).attr('href')
     if (href?.startsWith('/')) $(el).attr('href', domain + href)
   })
+  $('img').each((i, el) => {
+    const src = $(el).attr('src')
+    if (src?.startsWith('//')) $(el).attr('src', 'https:' + src)
+    else if (src?.startsWith('/')) $(el).attr('src', domain + src)
+    $(el).attr('srcset', null)
+  })
 
   // output html
   if (!fs.existsSync('output')) fs.mkdirSync('output')
-  fs.writeFileSync('output/page.html', $.html())
+  const baseName = url.split('/').pop()
+  fs.writeFileSync(`output/${baseName}.html`, $.html())
 
   // fetch all links that start with /wiki/
   const links = $('a[href^="/wiki/"]')
   const linkUrls = links.map((i, el) => {
     return $(el).attr('href');
-  }).get().slice(0, limitPerPage)
+  }).get().filter(s => !s.includes(':')).slice(0, limitPerPage)
 
   console.log('links', linkUrls);
   return linkUrls
