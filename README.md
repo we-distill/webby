@@ -1,21 +1,19 @@
 # webby
 
-This is a bun project. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+This is a Typescript project. 
 
-1. Install bun: https://bun.sh/docs/installation
+If you don't have node / npm set up, you can use [Bun](https://bun.sh) as well.
 
-   (you can also use `asdf` or `mise`)
-
-2. Install dependencies:
+1. Install dependencies:
 
 ```bash
-bun install
+npm install
 ```
 
 3. Run it:
 
 ```bash
-bun run index.ts https://en.wikipedia.org/wiki/Taylor_Swift
+npx tsx index.ts https://en.wikipedia.org/wiki/Taylor_Swift
 open output/Taylor_Swift.html
 ```
 
