@@ -10,7 +10,7 @@ If you don't have node / npm set up, you can use [Bun](https://bun.sh) as well.
 npm install
 ```
 
-3. Run it:
+1. Run it:
 
 ```bash
 npx tsx index.ts https://en.wikipedia.org/wiki/Taylor_Swift
